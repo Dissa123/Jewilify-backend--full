@@ -1,0 +1,10 @@
+[build]
+  functions = "functions"
+
+[dev]
+  publish = "dist"
+  
+[[headers]]
+    for = "/*"
+    [headers.values]
+        Access-Control-Allow-Origin = "*"

@@ -1,0 +1,4 @@
+/inventory /.netlify/functions/inventory 200
+/sign-in /.netlify/functions/sign-in 200
+/sign-up /.netlify/functions/sign-up 200
+/auth-router /.netlify/functions/auth-router 200
