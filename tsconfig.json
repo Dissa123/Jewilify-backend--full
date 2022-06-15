@@ -17,6 +17,7 @@
       }
   },
   "include": [
-      "src/**/*"
-  ]
+      "src/**/*",
+"routes/FileSubmitRouter.js", "routes/WoocomUser.js" ,
+ ],
 }

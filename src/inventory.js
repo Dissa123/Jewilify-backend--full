@@ -7,28 +7,30 @@ var User = require("./auth/auth.model");
 var InventoryData = require("/connectors/mongo-jcs-connector");
 
 exports.handler = async (event, res) => {
-  console.log(event)
+  console.log(event);
   const headers = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Origin,Content-Type, Authorization, X-Requested-With",
+    "Access-Control-Allow-Headers":
+      "Origin,Content-Type, Authorization, X-Requested-With",
     "Access-Control-Allow-Methods": "GET, POST,PUT,DELETE, OPTIONS",
   };
   var decoded;
-  var token=event.headers.authorization?event.headers.authorization:event.queryStringParameters.token?event.queryStringParameters.token:'';
+  var token = event.headers.authorization
+    ? event.headers.authorization
+    : event.queryStringParameters.token
+    ? event.queryStringParameters.token
+    : "";
 
   try {
-    decoded = jwt.verify(
-      token,
-      "M7HTLPdYICMz8sXCJz_leZmo"
-    );
+    decoded = jwt.verify(token, "M7HTLPdYICMz8sXCJz_leZmo");
     if (!decoded) {
       return {
         statusCode: 200,
         body: JSON.stringify({
           message: "No token provided!",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -48,13 +50,12 @@ exports.handler = async (event, res) => {
       body: JSON.stringify({
         message: "Unauthorized!",
       }),
-       headers,
+      headers,
     };
   }
 
   //Retrive Butk Products
   if (event.httpMethod == "GET" && !event.queryStringParameters.sku) {
-    
     const inventoryInfo = await InventoryData.find({ createdUser: decoded.id });
     var newInventoryInfo = [];
     if (inventoryInfo.length > 0) {
@@ -65,7 +66,7 @@ exports.handler = async (event, res) => {
       return {
         statusCode: 200,
         body: JSON.stringify(newInventoryInfo),
-         headers,
+        headers,
       };
     } else {
       return {
@@ -73,8 +74,8 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "No inventory found",
         }),
-        headers,}
-      ;
+        headers,
+      };
     }
   }
 
@@ -91,7 +92,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "No Products Found for given SKU!",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -102,7 +103,7 @@ exports.handler = async (event, res) => {
     return {
       statusCode: 200,
       body: JSON.stringify(data),
-       headers,
+      headers,
     };
   }
 
@@ -118,7 +119,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "type should be bothUpdate.",
         }),
-         headers,
+        headers,
       };
     }
     const inventoryInfo = await InventoryData.findOne({
@@ -130,7 +131,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "No Products Found for given SKU!",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -152,7 +153,7 @@ exports.handler = async (event, res) => {
             body: JSON.stringify({
               message: "failed!",
             }),
-             headers,
+            headers,
           };
         });
     }
@@ -165,7 +166,7 @@ exports.handler = async (event, res) => {
           event.queryStringParameters.sku +
           " has been deleted Products removed in both.",
       }),
-       headers,
+      headers,
     };
   }
 
@@ -181,7 +182,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "No Products Found for given SKU!",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -198,7 +199,7 @@ exports.handler = async (event, res) => {
           event.queryStringParameters.sku +
           " has been deleted Products removed.",
       }),
-       headers,
+      headers,
     };
   }
 
@@ -211,7 +212,7 @@ exports.handler = async (event, res) => {
       body: JSON.stringify({
         message: "Inventory Cleared",
       }),
-       headers,
+      headers,
     };
   }
 
@@ -223,7 +224,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "type should be updateBoth.",
         }),
-         headers,
+        headers,
       };
     }
     let body = JSON.parse(event.body);
@@ -248,7 +249,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "No style number found in the data",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -259,7 +260,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "SKU cannot be empty",
         }),
-         headers,
+        headers,
       };
     }
     var alreadySkus = [];
@@ -282,7 +283,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "this skus already added. : SKU:" + alreadySkus,
         }),
-         headers,
+        headers,
       };
     }
 
@@ -317,7 +318,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "item added failed : SKU:" + failedSave,
         }),
-         headers,
+        headers,
       };
     } else {
       return {
@@ -326,7 +327,7 @@ exports.handler = async (event, res) => {
           message: "You have successfully uploaded your inventory..",
           products: body,
         }),
-         headers,
+        headers,
       };
     }
   }
@@ -355,7 +356,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "No style number found in the data",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -366,7 +367,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "SKU cannot be empty",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -389,7 +390,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "this skus already added. : SKU:" + alreadySkus,
         }),
-         headers,
+        headers,
       };
     }
 
@@ -426,7 +427,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "item added failed : SKU:" + failedSave,
         }),
-         headers,
+        headers,
       };
     } else {
       return {
@@ -435,7 +436,7 @@ exports.handler = async (event, res) => {
           message: "You have successfully uploaded your inventory",
           products: body,
         }),
-         headers,
+        headers,
       };
     }
   }
@@ -452,7 +453,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "type should be bothUpdate.",
         }),
-         headers,
+        headers,
       };
     }
     let body = JSON.parse(event.body);
@@ -468,7 +469,7 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "No Products Found for given SKU!",
         }),
-         headers,
+        headers,
       };
     }
     try {
@@ -489,7 +490,7 @@ exports.handler = async (event, res) => {
           message: "update failed",
           products: body,
         }),
-         headers,
+        headers,
       };
     }
 
@@ -499,21 +500,23 @@ exports.handler = async (event, res) => {
         message: "You have successfully updated your inventory...",
         products: body,
       }),
-       headers,
+      headers,
     };
   }
 
   //Update Bulk Inventory db and woo
-  if (event.httpMethod == "PUT" && event.queryStringParameters.type &&
-  !event.queryStringParameters.sku) {
-
+  if (
+    event.httpMethod == "PUT" &&
+    event.queryStringParameters.type &&
+    !event.queryStringParameters.sku
+  ) {
     if (event.queryStringParameters.type != "updateBoth") {
       return {
         statusCode: 200,
         body: JSON.stringify({
           message: "type should be bothUpdate.",
         }),
-         headers,
+        headers,
       };
     }
 
@@ -526,7 +529,6 @@ exports.handler = async (event, res) => {
     console.log(event.body.products);
 
     const update = await body.products.map(async (element) => {
-
       const data = await InventoryData.findOne({
         sku: element.sku,
         createdUser: decoded.id,
@@ -534,7 +536,6 @@ exports.handler = async (event, res) => {
       if (!data) {
         invalidSkus.push(element.sku);
       } else {
-
         try {
           const mapedData = await mapWooDataPut(element, data);
           await wooCommerce
@@ -553,7 +554,7 @@ exports.handler = async (event, res) => {
               message: "update failed",
               products: body,
             }),
-             headers,
+            headers,
           };
         }
 
@@ -575,7 +576,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "No sku found in the data. SKUS : " + invalidSkus,
         }),
-         headers,
+        headers,
       };
     }
     if (updateFailed.length > 0) {
@@ -585,7 +586,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "update Failed SKUS : " + updateFailed,
         }),
-         headers,
+        headers,
       };
     }
 
@@ -595,7 +596,7 @@ exports.handler = async (event, res) => {
         message: "You have successfully updated your inventory",
         products: body,
       }),
-       headers,
+      headers,
     };
   }
 
@@ -614,12 +615,12 @@ exports.handler = async (event, res) => {
         body: JSON.stringify({
           message: "No Products Found for given SKU!",
         }),
-         headers,
+        headers,
       };
     }
     try {
       await InventoryData.findOneAndUpdate(
-        { sku: event.queryStringParameters.sku,createdUser: decoded.id, },
+        { sku: event.queryStringParameters.sku, createdUser: decoded.id },
         { $set: body }
       );
     } catch (error) {
@@ -629,7 +630,7 @@ exports.handler = async (event, res) => {
           message: "update failed",
           products: body,
         }),
-         headers,
+        headers,
       };
     }
 
@@ -639,14 +640,16 @@ exports.handler = async (event, res) => {
         message: "You have successfully updated your inventory",
         products: body,
       }),
-       headers,
+      headers,
     };
   }
 
   //Update Bulk Inventory
-  if (event.httpMethod == "PUT" &&
-  !event.queryStringParameters.sku &&
-  !event.queryStringParameters.type) {
+  if (
+    event.httpMethod == "PUT" &&
+    !event.queryStringParameters.sku &&
+    !event.queryStringParameters.type
+  ) {
     let body = JSON.parse(event.body);
     // var item = body;
     var invalidSkus = [];
@@ -669,7 +672,7 @@ exports.handler = async (event, res) => {
       } else {
         try {
           await InventoryData.findOneAndUpdate(
-            { sku: element.sku,createdUser: decoded.id, },
+            { sku: element.sku, createdUser: decoded.id },
             { $set: element }
           );
         } catch (error) {
@@ -685,7 +688,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "No sku found in the data. SKUS : " + invalidSkus,
         }),
-         headers,
+        headers,
       };
     }
     if (updateFailed.length > 0) {
@@ -695,7 +698,7 @@ exports.handler = async (event, res) => {
           status: false,
           message: "update Failed SKUS : " + updateFailed,
         }),
-         headers,
+        headers,
       };
     }
 
@@ -705,7 +708,7 @@ exports.handler = async (event, res) => {
         message: "You have successfully updated your inventory",
         products: body,
       }),
-       headers,
+      headers,
     };
   }
 
@@ -717,7 +720,17 @@ exports.handler = async (event, res) => {
     headers: { "Access-Control-Allow-Origin": "*" },
   };
 };
+// -----
+router.post("/displayProducts", async (req, res) => {
+  const { category } = req.body;
 
+  if (!category) {
+    return res.status(422).json({ error: "Plz Filled the field property" });
+  } else {
+    return res.status(200).jason({ true: "Done..!" });
+  }
+});
+// ----
 const getDataMap = (item) => {
   const obj = {
     categoryAbr: item.categoryAbr ? item.categoryAbr : "",
@@ -745,7 +758,7 @@ const getDataMap = (item) => {
       : "",
     certificateNumber: item.certificateNumber ? item.certificateNumber : "",
     labCertification: item.labCertification ? item.labCertification : "",
-    attributes: item.attributes ? item.attributes: [],
+    attributes: item.attributes ? item.attributes : [],
     shippingLength: item.shippingLength ? item.shippingLength : "",
     shippingWidth: item.shippingWidth ? item.shippingWidth : "",
     shippingHeight: item.shippingHeight ? item.shippingHeight : "",
@@ -759,9 +772,9 @@ const mapWooData = async (item) => {
   const wooObj = {
     name: item.productName ? item.productName : "Premium Quality",
     sku: item.sku ? item.sku : "",
-    stock_quantity:`${item.qty}`?item.qty:"",
+    stock_quantity: `${item.qty}` ? item.qty : "",
     type: "simple",
-    manage_stock:true,
+    manage_stock: true,
     regular_price: item.retailPrice ? `${item.retailPrice}` : "0.00",
     description: item.longDescription
       ? item.longDescription
@@ -769,7 +782,7 @@ const mapWooData = async (item) => {
     short_description: item.shortDescription
       ? item.shortDescription
       : "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.",
-      images: await mapWooImage(item.productImages)
+    images: await mapWooImage(item.productImages),
   };
   return wooObj;
 };
@@ -778,9 +791,9 @@ const mapWooDataPut = (item, db) => {
   const wooObj = {
     name: item.productName ? item.productName : db.productName,
     sku: item.sku ? item.sku : db.sku,
-    stock_quantity:item.qty?`${item.qty}`:`${db.qty}`,
+    stock_quantity: item.qty ? `${item.qty}` : `${db.qty}`,
     type: "simple",
-    manage_stock:true,
+    manage_stock: true,
     regular_price: item.retailPrice
       ? `${item.retailPrice}`
       : `${db.retailPrice}`,
@@ -794,15 +807,16 @@ const mapWooDataPut = (item, db) => {
   return wooObj;
 };
 
-const mapWooImage=(item)=>{
-  var imageArr=[]
-  if(item.length>0){
-    for(let i=0;i<item.length;i++){
+const mapWooImage = (item) => {
+  var imageArr = [];
+  if (item.length > 0) {
+    for (let i = 0; i < item.length; i++) {
       imageArr.push({
-        position : i,
-        src : item[i]})
+        position: i,
+        src: item[i],
+      });
     }
   }
-  console.log(imageArr)
-  return imageArr
-}
+  console.log(imageArr);
+  return imageArr;
+};
